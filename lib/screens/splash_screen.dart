@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bmi_calculator/main.dart';
+import 'package:bmi_calculator/screens/get_started.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -12,14 +13,26 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  bool isFirst = true;
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 3), () {
+
+    Future.delayed(Duration(seconds: 3), () {
+      animateChilds();
+    });
+
+    Future.delayed(Duration(seconds: 6), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => MyHomePage(title: 'Your BMI')),
+        MaterialPageRoute(builder: (context) => GetStarted(title: 'Your BMI')),
       );
+    });
+  }
+
+  void animateChilds() {
+    setState(() {
+      isFirst = false;
     });
   }
 
@@ -27,16 +40,30 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Colors.deepPurple,
+        color: Colors.deepPurple.shade300,
         child: Center(
-          child: Text(
-            'BMI \n CALCULATOR \n APP',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 34,
-              fontWeight: FontWeight.w700,
+          child: AnimatedCrossFade(
+            firstChild: Text(
+              'BMI \n Calculator \n App',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 43,
+                fontWeight: FontWeight.bold,
+              ),
             ),
+            secondChild: Image.asset(
+              'assets/images/bmi.png',
+              width: 200,
+              height: 200,
+            ),
+            crossFadeState: isFirst
+                ? CrossFadeState.showFirst
+                : CrossFadeState.showSecond,
+            duration: Duration(seconds: 2),
+            sizeCurve: Curves.fastOutSlowIn,
+            firstCurve: Curves.easeInOut,
+            secondCurve: Curves.bounceInOut,
           ),
         ),
       ),
