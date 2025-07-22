@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:bmi_calculator/main.dart';
 import 'package:bmi_calculator/screens/get_started.dart';
+import 'package:bmi_calculator/screens/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key, required this.title});
@@ -14,6 +16,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   bool isFirst = true;
+  bool isLogin = false;
   @override
   void initState() {
     super.initState();
@@ -21,13 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(Duration(seconds: 3), () {
       animateChilds();
     });
-
-    Future.delayed(Duration(seconds: 6), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => GetStarted(title: 'Your BMI')),
-      );
-    });
+    whereToGo();
   }
 
   void animateChilds() {
@@ -68,5 +65,35 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
       ),
     );
+  }
+
+  void whereToGo() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? isLogin = prefs.getBool('isLogin');
+
+    Future.delayed(Duration(seconds: 6), () {
+      if (isLogin != null) {
+        if (isLogin) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => GetStarted(title: 'Your BMI'),
+            ),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => LoginScreen(title: 'Login'),
+            ),
+          );
+        }
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => LoginScreen(title: 'Login')),
+        );
+      }
+    });
   }
 }

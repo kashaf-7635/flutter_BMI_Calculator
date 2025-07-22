@@ -1,5 +1,7 @@
 import 'package:bmi_calculator/main.dart';
+import 'package:bmi_calculator/screens/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GetStarted extends StatefulWidget {
   const GetStarted({super.key, required this.title});
@@ -28,16 +30,37 @@ class _GetStartedState extends State<GetStarted> {
                 ),
               ),
               SizedBox(height: 21),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MyHomePage(title: 'Your BMI'),
-                    ),
-                  );
-                },
-                child: Text('Calculate Your BMI'),
+              SizedBox(
+                width: 200,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MyHomePage(title: 'Your BMI'),
+                      ),
+                    );
+                  },
+                  child: Text('Calculate Your BMI'),
+                ),
+              ),
+              SizedBox(height: 11),
+              SizedBox(
+                width: 200,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    final SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    prefs.setBool('isLogin', false);
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => LoginScreen(title: 'Login'),
+                      ),
+                    );
+                  },
+                  child: Text('Logout'),
+                ),
               ),
             ],
           ),
