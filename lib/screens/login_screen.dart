@@ -1,4 +1,3 @@
-import 'package:bmi_calculator/main.dart';
 import 'package:bmi_calculator/screens/get_started.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
